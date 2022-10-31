@@ -10,6 +10,9 @@ const GlobalStyle = createGlobalStyle`
           'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
           'Segoe UI Symbol', sans-serif !important;
   }
+  body{
+    background: #e6fcf5;
+  }
 `;
 
 export default GlobalStyle;
