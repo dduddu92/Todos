@@ -1,32 +1,116 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { register, login, db, updateUser } from '../firebaseAuth';
+import { setDoc, doc } from 'firebase/firestore';
 import styled from 'styled-components';
 
 function AuthForm() {
-  const [changeAuthButton, setChangeAuthButton] = useState('true');
+  //input에 입력하는 값을 한번에 관리하기 위해 작성
+  const [userForm, setUserForm] = useState({
+    userName: '',
+    email: '',
+    password: '',
+  });
+
+  //구조분해 할당
+  const { userName, email, password } = userForm;
+
+  const [newAccount, setNewAccount] = useState(true);
+
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const onChange = event => {
+    const {
+      target: { name, value },
+    } = event;
+    setUserForm({ ...userForm, [name]: value });
+  };
+
+  useEffect(() => {
+    if (!userName && !email && !password) {
+      setErrorMessage('정보를 입력해주세요.');
+    }
+  }, []);
+  const onSubmit = async event => {
+    event.preventDefault();
+    if (newAccount) {
+      //회원가입을 진행
+      await register(email, password)
+        .then(result => {
+          const userInfo = {
+            userName,
+            email,
+          };
+          // 문서의 id를 유저의 uid로 설정
+          setDoc(doc(db, 'users', result.user.uid), userInfo);
+          updateUser(userInfo.userName);
+          alert('회원가입을 축하드립니다!');
+          setUserForm({
+            userName: '',
+            email: '',
+            password: '',
+          });
+          setNewAccount(false);
+        })
+        .catch(err => {
+          switch (err.code) {
+            case 'auth/email-already-in-use':
+              return alert('이미 사용중인 이메일입니다.');
+            default:
+              return alert('회원가입에 실패했습니다.');
+          }
+        });
+    } else {
+      //로그인을 진행
+      login(email, password).then(result => {
+        console.log(result.user);
+      });
+    }
+  };
+
   return (
     <AuthFormWrapper>
       <AuthTitle>Todo List</AuthTitle>
-      <AuthFormBox>
-        <AuthNameInput
-          type="text"
-          name="userName"
-          placeholder="성함을 입력해주세요."
-        />
+      <AuthFormBox onSubmit={onSubmit}>
+        {newAccount === true && (
+          <AuthNameInput
+            type="text"
+            name="userName"
+            placeholder="UserName"
+            value={userName}
+            onChange={onChange}
+          />
+        )}
         <AuthEmailInput
           type="email"
           name="email"
-          placeholder="이메일을 입력하세요."
+          placeholder="Email"
+          value={email}
+          required
           autoFocus
+          onChange={onChange}
         />
         <AuthPasswordInput
           type="password"
           name="password"
-          placeholder="비밀번호를 입력하세요."
+          placeholder="Password"
+          value={password}
+          required
+          onChange={onChange}
         />
-
-        <AuthSubmitButton>누르는 버튼</AuthSubmitButton>
+        <ErrorMessage>{errorMessage}</ErrorMessage>
+        {newAccount === false ? (
+          <AuthSubmitButton type="submit">로그인</AuthSubmitButton>
+        ) : (
+          <AuthSubmitButton type="submit">회원가입</AuthSubmitButton>
+        )}
       </AuthFormBox>
-      <AuthTypeChangeButton>누르면 버튼이 바뀜</AuthTypeChangeButton>
+      <AuthTypeChangeButton
+        onClick={() => {
+          setNewAccount(!newAccount);
+        }}
+      >
+        {newAccount ? '로그인' : '회원가입'}
+      </AuthTypeChangeButton>
     </AuthFormWrapper>
   );
 }
@@ -71,6 +155,12 @@ const AuthEmailInput = styled.input`
 const AuthPasswordInput = styled(AuthEmailInput)``;
 
 const AuthNameInput = styled(AuthEmailInput)``;
+
+const ErrorMessage = styled.p`
+  color: red;
+  text-align: center;
+  margin-bottom: 10px;
+`;
 
 const AuthSubmitButton = styled.button`
   height: 50px;
