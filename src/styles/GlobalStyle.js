@@ -11,6 +11,8 @@ const GlobalStyle = createGlobalStyle`
           'Segoe UI Symbol', sans-serif !important;
   }
   body{
+    position: relative;
+    padding-top: 80px;
     background: #e6fcf5;
   }
 `;

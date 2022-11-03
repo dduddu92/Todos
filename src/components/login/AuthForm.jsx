@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { register, login, db, updateUser } from '../firebaseAuth';
+import React, { useState } from 'react';
+import { register, login, db, updateUser } from '../../firebaseAuth';
 import { setDoc, doc } from 'firebase/firestore';
 import styled from 'styled-components';
 
@@ -14,8 +14,9 @@ function AuthForm() {
   //구조분해 할당
   const { userName, email, password } = userForm;
 
-  const [newAccount, setNewAccount] = useState(true);
+  const [newAccount, setNewAccount] = useState(false);
 
+  //정규 표현식 추후 적용 예정
   const [errorMessage, setErrorMessage] = useState(null);
 
   const onChange = event => {
@@ -25,17 +26,12 @@ function AuthForm() {
     setUserForm({ ...userForm, [name]: value });
   };
 
-  useEffect(() => {
-    if (!userName && !email && !password) {
-      setErrorMessage('정보를 입력해주세요.');
-    }
-  }, []);
   const onSubmit = async event => {
     event.preventDefault();
-    if (newAccount) {
-      //회원가입을 진행
-      await register(email, password)
-        .then(result => {
+    try {
+      if (newAccount) {
+        //회원가입을 진행
+        await register(email, password).then(result => {
           const userInfo = {
             userName,
             email,
@@ -50,20 +46,31 @@ function AuthForm() {
             password: '',
           });
           setNewAccount(false);
-        })
-        .catch(err => {
-          switch (err.code) {
-            case 'auth/email-already-in-use':
-              return alert('이미 사용중인 이메일입니다.');
-            default:
-              return alert('회원가입에 실패했습니다.');
-          }
         });
-    } else {
-      //로그인을 진행
-      login(email, password).then(result => {
-        console.log(result.user);
+      } else {
+        //로그인을 진행
+        await login(email, password).then(result => {
+          alert(`환영합니다. ${result.user.displayName}님😆`);
+        });
+      }
+    } catch (error) {
+      setUserForm({
+        userName: '',
+        email: '',
+        password: '',
       });
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          return setErrorMessage('이미 사용중인 이메일입니다.');
+        case 'auth/user-not-found':
+          return setErrorMessage('회원 정보가 존재하지 않습니다.');
+        case 'auth/wrong-password':
+          return setErrorMessage('비밀번호가 틀렸습니다.');
+        case 'auth/invalid-email':
+          return setErrorMessage('유효하지 않은 이메일입니다.');
+        default:
+          return setErrorMessage('잠시 후 다시 시도 해주세요.');
+      }
     }
   };
 

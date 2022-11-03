@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import AuthForm from '../../components/AuthForm';
-import AuthTemplate from '../../components/AuthTemplate';
+import AuthForm from '../../components/login/AuthForm';
+import AuthTemplate from '../../components/login/AuthTemplate';
 
 function Login() {
   return (
@@ -14,7 +14,7 @@ function Login() {
 }
 
 const LoginBlock = styled.div`
-  height: 100vh;
+  height: calc(100vh - 160px);
   display: flex;
   align-items: center;
 `;
