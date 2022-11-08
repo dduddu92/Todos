@@ -12,7 +12,6 @@ const GlobalStyle = createGlobalStyle`
   }
   body{
     position: relative;
-    padding-top: 80px;
     background: #e6fcf5;
   }
 `;

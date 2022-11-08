@@ -14,7 +14,7 @@ function Login() {
 }
 
 const LoginBlock = styled.div`
-  height: calc(100vh - 160px);
+  height: 100vh;
   display: flex;
   align-items: center;
 `;

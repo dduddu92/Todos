@@ -1,21 +1,19 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Login from './pages/Login/Login';
 import Todo from './pages/Todo/Todo';
 
-const Router = ({ isLoggedIn, loggedUserObj }) => {
+const Router = () => {
   return (
-    <BrowserRouter>
-      {isLoggedIn && <Navigation loggedUserObj={loggedUserObj} />}
+    <>
+      {/*로그인 화면에서는 navigation bar 보이지 않음*/}
+      {useLocation().pathname !== '/' && <Navigation />}
       <Routes>
-        {isLoggedIn ? (
-          <Route path="/" element={<Todo />} />
-        ) : (
-          <Route path="/" element={<Login />} />
-        )}
+        <Route path="/todo" element={<Todo />} />
+        <Route path="/" element={<Login />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
 

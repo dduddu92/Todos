@@ -1,35 +1,28 @@
+import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { auth } from './firebaseAuth';
 import Router from './Router';
 import GlobalStyle from './styles/GlobalStyle';
 
 function App() {
   const [initialized, setInitialized] = useState(false);
-  //로그인 여부에 따라 보이는 화면의 상태가 달라지게 설정
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loggedUserObj, setLoggedUserObj] = useState(null);
-
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
+    onAuthStateChanged(auth, user => {
       if (user) {
-        setIsLoggedIn(true);
-        setLoggedUserObj(user);
+        localStorage.setItem('user', JSON.stringify(user));
       } else {
-        setIsLoggedIn(false);
+        localStorage.removeItem('user');
       }
       setInitialized(true);
     });
   }, []);
 
   return (
-    <>
+    <BrowserRouter>
       <GlobalStyle />
-      {initialized ? (
-        <Router isLoggedIn={isLoggedIn} loggedUserObj={loggedUserObj} />
-      ) : (
-        '잠시만 기다려 주세요.'
-      )}
-    </>
+      {initialized ? <Router /> : '잠시만 기다려 주세요.'}
+    </BrowserRouter>
   );
 }
 

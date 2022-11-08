@@ -1,12 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { auth, logOut } from '../firebaseAuth';
 
-const Navigation = ({ loggedUserObj }) => {
+const Navigation = () => {
+  const navigate = useNavigate();
+  const user = auth.currentUser;
   const onLogOutClick = () => {
     logOut(auth)
       .then(() => {
         alert('로그아웃 되었습니다. 로그인 화면으로 돌아갑니다.');
+        navigate('/');
       })
       .catch(err => {
         alert(err.message);
@@ -16,7 +20,7 @@ const Navigation = ({ loggedUserObj }) => {
     <NavigationWrapper>
       <Ul>
         <li>
-          <UserName>{loggedUserObj.displayName}</UserName>
+          <UserName>{user.displayName}</UserName>
         </li>
         <li>
           <LogoutButton onClick={onLogOutClick}>로그아웃</LogoutButton>

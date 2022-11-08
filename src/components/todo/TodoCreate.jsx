@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db } from '../../firebaseAuth';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import styled, { css } from 'styled-components';
 import { MdAdd } from 'react-icons/md';
 
@@ -14,16 +14,18 @@ function TodoCreate() {
     } = event;
     setTodo(value);
   };
-
+  const userInfo = localStorage.getItem('user');
+  const userUid = JSON.parse(userInfo).uid;
   const onSubmit = async event => {
     event.preventDefault(); //새로 고침 방지
     try {
       if (todo === '') {
         alert('내용을 입력 해주세요.');
       } else {
-        await addDoc(collection(db, 'todo'), {
-          todo,
-          createdAt: serverTimestamp(),
+        await addDoc(collection(db, 'todos'), {
+          creatorId: userUid,
+          text: todo,
+          createdAt: new Date(),
         });
         setTodo('');
       }
@@ -42,6 +44,7 @@ function TodoCreate() {
               value={todo}
               placeholder="할 일을 입력 후, Enter 를 눌러주세요."
               onChange={onChange}
+              disabled={userInfo === null}
             />
           </InsertForm>
         </InsertFormPosition>
@@ -105,19 +108,18 @@ const InsertForm = styled.form`
   padding-top: 32px;
   padding-right: 32px;
   padding-bottom: 72px;
-
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   border-top: 1px solid #e9ecef;
 `;
 
 const Input = styled.input`
+  width: 100%;
   padding: 12px;
   border-radius: 4px;
   border: 1px solid #dee2e6;
-  width: 100%;
-  outline: none;
   font-size: 18px;
+  outline: none;
   box-sizing: border-box;
 `;
 

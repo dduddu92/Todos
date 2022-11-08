@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { register, login, db, updateUser } from '../../firebaseAuth';
 import { setDoc, doc } from 'firebase/firestore';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 function AuthForm() {
   //input에 입력하는 값을 한번에 관리하기 위해 작성
@@ -18,6 +19,8 @@ function AuthForm() {
 
   //정규 표현식 추후 적용 예정
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const navigate = useNavigate();
 
   const onChange = event => {
     const {
@@ -51,6 +54,7 @@ function AuthForm() {
         //로그인을 진행
         await login(email, password).then(result => {
           alert(`환영합니다. ${result.user.displayName}님😆`);
+          navigate('/todo');
         });
       }
     } catch (error) {
