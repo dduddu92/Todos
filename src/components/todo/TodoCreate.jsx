@@ -26,6 +26,7 @@ function TodoCreate() {
           creatorId: userUid,
           text: todo,
           createdAt: new Date(),
+          done: false,
         });
         setTodo('');
       }

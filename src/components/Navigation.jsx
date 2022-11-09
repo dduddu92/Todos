@@ -18,6 +18,7 @@ const Navigation = () => {
   };
   return (
     <NavigationWrapper>
+      <Title>TodoList</Title>
       <Ul>
         <li>
           <UserName>{user.displayName}</UserName>
@@ -38,7 +39,15 @@ const NavigationWrapper = styled.nav`
   align-items: center;
   width: 100%;
   height: 80px;
+  padding: 0 20px;
   background-color: #92e2c5;
+`;
+
+const Title = styled.h1`
+  color: #087f5b;
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
 `;
 
 const Ul = styled.ul`
@@ -46,7 +55,6 @@ const Ul = styled.ul`
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  padding: 0 20px;
 `;
 
 const UserName = styled.span`
