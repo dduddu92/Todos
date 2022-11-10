@@ -11,10 +11,9 @@ const Router = () => {
       {useLocation().pathname !== '/' && <Navigation />}
       <Routes>
         <Route path="/todo" element={<Todo />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/" exact element={<Login />} />
       </Routes>
     </>
   );
 };
-
 export default Router;

@@ -38,14 +38,14 @@ const TodoItem = ({ id, text, done }) => {
 
   //투두 삭제하기
   const onDeleteClick = async () => {
-    const confirmToUser = window.confirm('정말 삭제하시겠습니까?');
+    const confirmToUser = window.confirm('정말 삭제하시겠습니까?🤔');
     const postDelete = doc(db, 'todos', `${id}`);
     if (confirmToUser) {
       await deleteDoc(postDelete);
     }
   };
   return (
-    <TodoItemWrapper onSubmit={onSubmit}>
+    <TodoItemForm onSubmit={onSubmit}>
       <CheckCircle done={done} onClick={onToggleClick}>
         {done && <MdDone />}
       </CheckCircle>
@@ -68,15 +68,17 @@ const TodoItem = ({ id, text, done }) => {
       ) : (
         <>
           <Text done={done}>{text}</Text>
-          <EditButton>
-            <MdEdit onClick={onEditClick} />
-          </EditButton>
+          {!done && (
+            <EditButton>
+              <MdEdit onClick={onEditClick} />
+            </EditButton>
+          )}
           <Remove>
             <MdDelete onClick={onDeleteClick} />
           </Remove>
         </>
       )}
-    </TodoItemWrapper>
+    </TodoItemForm>
   );
 };
 
@@ -90,7 +92,6 @@ const Remove = styled.div`
   &:hover {
     color: #ff6b6b;
   }
-  opacity: 0;
 `;
 
 const EditButton = styled(Remove)`
@@ -100,15 +101,10 @@ const EditButton = styled(Remove)`
   }
 `;
 
-const TodoItemWrapper = styled.form`
+const TodoItemForm = styled.form`
   display: flex;
   align-items: center;
   padding-bottom: 12px;
-  &:hover {
-    ${Remove} {
-      opacity: 1;
-    }
-  }
 `;
 
 const CheckCircle = styled.div`
@@ -134,7 +130,7 @@ const Text = styled.div`
   flex: 1;
   padding: 8px 0 8px 5px;
   color: #495057;
-  font-size: 21px;
+  font-size: 20px;
   line-height: normal;
   ${props =>
     props.done &&
@@ -149,7 +145,7 @@ const TextInput = styled.input`
   padding: 8px 0 8px 5px;
   color: #495057;
   border: 0;
-  font-size: 21px;
+  font-size: 20px;
   outline: none;
   &:focus {
     background-color: #e6fcf5;

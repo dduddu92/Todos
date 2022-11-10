@@ -7,6 +7,7 @@ import GlobalStyle from './styles/GlobalStyle';
 
 function App() {
   const [initialized, setInitialized] = useState(false);
+
   useEffect(() => {
     onAuthStateChanged(auth, user => {
       if (user) {

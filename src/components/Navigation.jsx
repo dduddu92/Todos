@@ -1,11 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { auth, logOut } from '../firebaseAuth';
+import styled from 'styled-components';
 
 const Navigation = () => {
   const navigate = useNavigate();
-  const user = auth.currentUser;
   const onLogOutClick = () => {
     logOut(auth)
       .then(() => {
@@ -18,11 +17,8 @@ const Navigation = () => {
   };
   return (
     <NavigationWrapper>
-      <Title>TodoList</Title>
+      <Title>TODOLIST</Title>
       <Ul>
-        <li>
-          <UserName>{user.displayName}</UserName>
-        </li>
         <li>
           <LogoutButton onClick={onLogOutClick}>로그아웃</LogoutButton>
         </li>
@@ -45,22 +41,16 @@ const NavigationWrapper = styled.nav`
 
 const Title = styled.h1`
   color: #087f5b;
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 36px;
   text-align: center;
+  font-family: 'yg-jalnan';
 `;
 
 const Ul = styled.ul`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 100%;
-`;
-
-const UserName = styled.span`
-  margin-right: 20px;
-  font-size: 16px;
-  letter-spacing: 1px;
+  flex: 1;
 `;
 
 const LogoutButton = styled.button`

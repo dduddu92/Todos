@@ -80,8 +80,8 @@ function AuthForm() {
 
   return (
     <AuthFormWrapper>
-      <AuthTitle>Todo List</AuthTitle>
-      <AuthFormBox onSubmit={onSubmit}>
+      <AuthTitle>TODOLIST</AuthTitle>
+      <AuthFormBox onSubmit={onSubmit} autoComplete="off">
         {newAccount === true && (
           <AuthNameInput
             type="text"
@@ -139,8 +139,8 @@ const AuthTitle = styled.h1`
   margin: 0 0 40px;
   color: #087f5b;
   font-size: 40px;
-  font-weight: bold;
   text-align: center;
+  font-family: 'yg-jalnan';
 `;
 
 const AuthFormBox = styled.form`
