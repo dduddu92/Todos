@@ -73,7 +73,8 @@ function AuthForm() {
         case 'auth/invalid-email':
           return setErrorMessage('유효하지 않은 이메일입니다.');
         default:
-          return setErrorMessage('잠시 후 다시 시도 해주세요.');
+          // return setErrorMessage('잠시 후 다시 시도 해주세요.');
+          return alert(error.code);
       }
     }
   };
