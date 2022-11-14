@@ -7,7 +7,10 @@ import { MdAdd } from 'react-icons/md';
 function TodoCreate() {
   const [open, setOpen] = useState(false);
   const [todo, setTodo] = useState('');
-  const onToggle = () => setOpen(!open);
+  const onToggle = () => {
+    setTodo('');
+    setOpen(!open);
+  };
   const onChange = event => {
     const {
       target: { value },

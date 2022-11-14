@@ -43,7 +43,7 @@ const TodoHeader = () => {
       <UndoneCountBlock>
         {todos.length === 0 ? (
           <Text>
-            <span>{displayName}</span>님의 할 일 목록
+            <span>{displayName}</span>님 업무를 등록해 주세요 😄
           </Text>
         ) : undoneTask.length !== todos.length && undoneTask.length === 0 ? (
           <Text>
