@@ -72,9 +72,10 @@ function AuthForm() {
           return setErrorMessage('비밀번호가 틀렸습니다.');
         case 'auth/invalid-email':
           return setErrorMessage('유효하지 않은 이메일입니다.');
+        case 'auth/weak-password':
+          return setErrorMessage('비밀번호는 6자 이상이어야 합니다.');
         default:
-          // return setErrorMessage('잠시 후 다시 시도 해주세요.');
-          return alert(error.code);
+          return setErrorMessage(error.code);
       }
     }
   };
